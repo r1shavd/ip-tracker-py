@@ -13,8 +13,11 @@ Usage :
 Author : Rishav Das (https://github.com/rdofficial/)
 Created on : May 9, 2021
 
-Last modified by : -
-Last modified on : -
+Last modified by : Rishav Das (https://github.com/rdofficial/)
+Last modified on : May 15, 2021
+
+Changes made in last modification:
+1. Replaced the older way of executing GET HTTP requests using requests module, with an alternative way of using the urllib module in the python3 standard library. This reduces the need of the dependency of the requests module to be installed.
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
@@ -24,7 +27,8 @@ Authors contributed to this script (Add your name below if you have contributed)
 try:
     from os import system
     from sys import platform
-    from requests import get
+    from json import loads
+    from urllib import request
 except Exception as e:
     # If there are any errors encountered during the importing of the modules, then we display the error on the console screen
 
@@ -72,11 +76,13 @@ def main():
     else:
         # If the user entered value is not blank, then we continue
 
-        response = get(f'http://ipinfo.io/{ipAddress}')
-        if response.status_code == 200:
+        # Sending a GET HTTP request
+        response = request.urlopen(f'http://ipinfo.io/{ipAddress}')
+        if response.status == 200:
             # If the response we recieved indicates successfull HTTP request
 
-            response = response.json()
+            response = response.read().decode()  # Reading the response from the server
+            response = loads(response)  # Parsing the response in JSON format
             for item in response:
                 print(f'[{green}#{defcol}] %-25s    :    {yellow}%-25s{defcol}' %(item.upper(), response[item]))
         else:
