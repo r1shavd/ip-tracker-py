@@ -1,23 +1,20 @@
 """
 IP Tracker
 
-This is a tool which serves the feature of fetching out information about any IP address (i.e., any computer device that is publically connected to the internet, and we just need the address of it). The tool is written in Python3.
-Dependencies :
-1. requests - python3 module
+This is a tool which serves the feature of fetching out information about any IP address (i.e., any computer device that is publically connected to the internet, and we just need the address of it). The tool is written in Python3. This is the CLI version of the tool, and the original version too which is mostly maintained between regular intervals.
 
 Usage :
-1. First clone the repository from github mirror of it, using the command 'git clone https://github.com/anirudhataliyan/IPTracker/' [Type these commands in the terminal].
-2. Use this command to install the dependencies - 'pip3 install requests'.
-3. Run the script using these commands - 'python3 IPTracker.py'
+1. First clone the repository from github mirror of it, using the command 'git clone https://github.com/rdofficial/ip-tracker-py/' [Type these commands in the terminal].
+2. Run the script using these commands - 'python3 IPTracker.py'
 
 Author : Rishav Das (https://github.com/rdofficial/)
 Created on : May 9, 2021
 
 Last modified by : Rishav Das (https://github.com/rdofficial/)
-Last modified on : May 15, 2021
+Last modified on : May 16, 2021
 
 Changes made in last modification:
-1. Replaced the older way of cleaning console screen with the newer way, which apparently works with both linux as well as windows. The previous version was only working for linux (or operating systems which supported unix commands).
+1. Updated the commented docs as per the updates.
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
