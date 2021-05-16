@@ -17,7 +17,7 @@ Last modified by : Rishav Das (https://github.com/rdofficial/)
 Last modified on : May 15, 2021
 
 Changes made in last modification:
-1. Replaced the older way of executing GET HTTP requests using requests module, with an alternative way of using the urllib module in the python3 standard library. This reduces the need of the dependency of the requests module to be installed.
+1. Replaced the older way of cleaning console screen with the newer way, which apparently works with both linux as well as windows. The previous version was only working for linux (or operating systems which supported unix commands).
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
@@ -59,7 +59,7 @@ else:
 
 def main():
     # Displaying the banner and other info
-    system('clear')
+    system(clear)
     print(f'\t\t[ {yellow_rev}IP Tracker{defcol} ]\n')  # The tool name
     print(f'[{green}!{defcol}]-------------{yellow}About author{defcol}-------------[{green}!{defcol}]\n[{red}#{defcol}] Instagram : {yellow}@rishavd._{defcol}\n[{red}#{defcol}] Github : {yellow}https://github.com/rdofficial/{defcol}\n')  # The author's information
     print(f'[{green}!{defcol}]-----------------{yellow}Note{defcol}-----------------[{green}!{defcol}]\n[{red}1{defcol}] Make sure you are connected to internet.\n[{red}2{defcol}] Make sure the IP address you are looking is a public IP.\n[{red}3{defcol}] If you want to stop the script in the middle, then press CTRL+C key combo.\n')
