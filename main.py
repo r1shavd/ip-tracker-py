@@ -11,10 +11,10 @@ Author : Rishav Das (https://github.com/rdofficial/)
 Created on : May 9, 2021
 
 Last modified by : Rishav Das (https://github.com/rdofficial/)
-Last modified on : May 16, 2021
+Last modified on : May 19, 2021
 
 Changes made in last modification:
-1. Updated the commented docs as per the updates.
+1. Added the feature to read the user input via arguments while calling the script.
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
@@ -22,6 +22,7 @@ Authors contributed to this script (Add your name below if you have contributed)
 
 # Importing the requird functions and modules
 try:
+    from sys import argv as arguments
     from os import system
     from sys import platform
     from json import loads
@@ -61,8 +62,19 @@ def main():
     print(f'[{green}!{defcol}]-------------{yellow}About author{defcol}-------------[{green}!{defcol}]\n[{red}#{defcol}] Instagram : {yellow}@rishavd._{defcol}\n[{red}#{defcol}] Github : {yellow}https://github.com/rdofficial/{defcol}\n')  # The author's information
     print(f'[{green}!{defcol}]-----------------{yellow}Note{defcol}-----------------[{green}!{defcol}]\n[{red}1{defcol}] Make sure you are connected to internet.\n[{red}2{defcol}] Make sure the IP address you are looking is a public IP.\n[{red}3{defcol}] If you want to stop the script in the middle, then press CTRL+C key combo.\n')
 
-    # Asking the user to enter the IP Address
-    ipAddress = input('Enter the IP address : ')
+    # Getting the IP address via user entered arguments
+    if len(arguments) >= 3:
+        # If the user entered valid amount of arguments, then we continue
+
+        if arguments[1] == '-i' or arguments[1] == '--ip-address':
+            # If the argument tag for IP address is mentioned, then we seek for the succeeding tag as the user specified IP address input
+
+            ipAddress = arguments[2]
+    else:
+        # If the user did not entered any required amount of arguments, then we continue to ask for the information manually
+
+        # Asking the user to enter the IP Address
+        ipAddress = input('Enter the IP address : ')
 
     # Checking if the user entered blank value or not
     if len(ipAddress) == 0:
