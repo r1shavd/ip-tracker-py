@@ -11,10 +11,10 @@ Author : Rishav Das (https://github.com/rdofficial/)
 Created on : May 9, 2021
 
 Last modified by : Rishav Das (https://github.com/rdofficial/)
-Last modified on : May 19, 2021
+Last modified on : May 21, 2021
 
 Changes made in last modification:
-1. Added the feature to read the user input via arguments while calling the script.
+1. Adding the information fetching codes inside the function fetchIp(). Thus making the script file more simpler and organised.
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
@@ -22,9 +22,8 @@ Authors contributed to this script (Add your name below if you have contributed)
 
 # Importing the requird functions and modules
 try:
-    from sys import argv as arguments
+    from sys import argv as arguments, platform
     from os import system
-    from sys import platform
     from json import loads
     from urllib import request
 except Exception as e:
@@ -55,6 +54,36 @@ else:
     defcol = ''
     clear = 'cls'
 
+def fetchIp(ip = '', save = True):
+	""" This function fetches the details of the user provided IP address, also the IP address provided should be of a public server, computer / network system, otherwise the tracking results will be resulting in failure (HTTP:404). The function fetches the information of the user specified IP address from an external API (http://ipinfo.io/). The function takes 1 argument : ip, save. The ip argument is to specify the IP address. The argument 'save' is a flag used to determine whether to save the fetched results or not. The function prints the fetched data to the console screen and then proceeds with either saving the data or not. """
+
+    # Validating the user specified IP address
+    if len(ip) == 0:
+        # If the user specified IP address string is empty, then we raise an error
+
+        raise ValueError('The specified IP address value is an empty string.')
+    else:
+        # If the user specfied IP address is not empty, then we continue the task
+
+        # Sending the HTTP GET request
+        response = request.urlopen(f'http://ipinfo.io/{ipAddress}')
+
+        # Checking the response HTTP code
+        if response.status == 200:
+            # If the response from the API server states no error, then we continue
+
+            # Parsing the contents of the response from JSON format
+            response = response.read().decode()
+            response = loads(response)
+
+            # Printing the fetched information on the console screen in a more organised form
+            for item in response:
+                print(f'[{green}#{defcol}] %-25s    :    {yellow}%-25s{defcol}' %(item.upper(), response[item]))
+        else:
+            # If the response from the API server states any form of error, then we raise the error
+
+            raise SystemError(f'{loads(response.read().decode())["error"]["message"]}')
+
 def main():
     # Displaying the banner and other info
     system(clear)
@@ -76,29 +105,8 @@ def main():
         # Asking the user to enter the IP Address
         ipAddress = input('Enter the IP address : ')
 
-    # Checking if the user entered blank value or not
-    if len(ipAddress) == 0:
-        # If the user entered value is blank, then we display the error on the console screen
-
-        input(f'{red_rev}[ Error : {e} ]{defcol}\nPress enter key to continue...')
-        return 0
-    else:
-        # If the user entered value is not blank, then we continue
-
-        # Sending a GET HTTP request
-        response = request.urlopen(f'http://ipinfo.io/{ipAddress}')
-        if response.status == 200:
-            # If the response we recieved indicates successfull HTTP request
-
-            response = response.read().decode()  # Reading the response from the server
-            response = loads(response)  # Parsing the response in JSON format
-            for item in response:
-                print(f'[{green}#{defcol}] %-25s    :    {yellow}%-25s{defcol}' %(item.upper(), response[item]))
-        else:
-            # If the response we recieved indicates failed HTTP request, then we display the error on the console screen
-
-            input(f'{red_rev}[ Error : Failed to fetch the information about the specified IP address ]{defcol}\nPress enter key to continue...')
-            return 0
+    # Fetching the information for the user specified IP address
+    fetchIp(ip = ipAddress, save = False)
 
 if __name__ == '__main__':
     try:
