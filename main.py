@@ -14,7 +14,7 @@ Last modified by : Rishav Das (https://github.com/rdofficial/)
 Last modified on : May 22, 2021
 
 Changes made in last modification:
-1. Adding the feature to fetchIp() function to save the fetched data into a local file as per mentioned in the arguments (the flag 'save').
+1. Removing the importing of os.system() function, and thus removing some of the non-required lines of code. Also, removed the printing of the tool banner.
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
@@ -23,7 +23,6 @@ Authors contributed to this script (Add your name below if you have contributed)
 # Importing the requird functions and modules
 try:
     from sys import argv as arguments, platform
-    from os import system
     from json import loads, dumps
     from urllib import request
     from datetime import datetime
@@ -44,7 +43,6 @@ if 'linux' in platform:
     red_rev = '\033[07;91m'
     yellow_rev = '\033[07;92m'
     defcol = '\033[00m'
-    clear = 'clear'
 else:
     red = ''
     green = ''
@@ -53,7 +51,6 @@ else:
     red_rev = ''
     yellow_rev = ''
     defcol = ''
-    clear = 'cls'
 
 def fetchIp(ip = '', save = False):
     """ This function fetches the details of the user provided IP address, also the IP address provided should be of a public server, computer / network system, otherwise the tracking results will be resulting in failure (HTTP:404). The function fetches the information of the user specified IP address from an external API (http://ipinfo.io/). The function takes 1 argument : ip, save. The ip argument is to specify the IP address. The argument 'save' is a flag used to determine whether to save the fetched results to a file on local machine or not. The function prints the fetched data to the console screen and then proceeds with either saving the data or not. """
@@ -98,10 +95,7 @@ def fetchIp(ip = '', save = False):
             raise SystemError(f'{loads(response.read().decode())["error"]["message"]}')
 
 def main():
-    # Displaying the banner and other info
-    system(clear)
-    print(f'\t\t[ {yellow_rev}IP Tracker{defcol} ]\n')  # The tool name
-    print(f'[{green}!{defcol}]-------------{yellow}About author{defcol}-------------[{green}!{defcol}]\n[{red}#{defcol}] Instagram : {yellow}@rishavd._{defcol}\n[{red}#{defcol}] Github : {yellow}https://github.com/rdofficial/{defcol}\n')  # The author's information
+    # Displaying some warnings before proceeding to the task
     print(f'[{green}!{defcol}]-----------------{yellow}Note{defcol}-----------------[{green}!{defcol}]\n[{red}1{defcol}] Make sure you are connected to internet.\n[{red}2{defcol}] Make sure the IP address you are looking is a public IP.\n[{red}3{defcol}] If you want to stop the script in the middle, then press CTRL+C key combo.\n')
 
     # Getting the IP address via user entered arguments
