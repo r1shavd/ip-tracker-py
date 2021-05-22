@@ -11,10 +11,10 @@ Author : Rishav Das (https://github.com/rdofficial/)
 Created on : May 9, 2021
 
 Last modified by : Rishav Das (https://github.com/rdofficial/)
-Last modified on : May 21, 2021
+Last modified on : May 22, 2021
 
 Changes made in last modification:
-1. Adding the information fetching codes inside the function fetchIp(). Thus making the script file more simpler and organised.
+1. Adding the feature to fetchIp() function to save the fetched data into a local file as per mentioned in the arguments (the flag 'save').
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
@@ -24,8 +24,9 @@ Authors contributed to this script (Add your name below if you have contributed)
 try:
     from sys import argv as arguments, platform
     from os import system
-    from json import loads
+    from json import loads, dumps
     from urllib import request
+    from datetime import datetime
 except Exception as e:
     # If there are any errors encountered during the importing of the modules, then we display the error on the console screen
 
@@ -54,8 +55,8 @@ else:
     defcol = ''
     clear = 'cls'
 
-def fetchIp(ip = '', save = True):
-	""" This function fetches the details of the user provided IP address, also the IP address provided should be of a public server, computer / network system, otherwise the tracking results will be resulting in failure (HTTP:404). The function fetches the information of the user specified IP address from an external API (http://ipinfo.io/). The function takes 1 argument : ip, save. The ip argument is to specify the IP address. The argument 'save' is a flag used to determine whether to save the fetched results or not. The function prints the fetched data to the console screen and then proceeds with either saving the data or not. """
+def fetchIp(ip = '', save = False):
+    """ This function fetches the details of the user provided IP address, also the IP address provided should be of a public server, computer / network system, otherwise the tracking results will be resulting in failure (HTTP:404). The function fetches the information of the user specified IP address from an external API (http://ipinfo.io/). The function takes 1 argument : ip, save. The ip argument is to specify the IP address. The argument 'save' is a flag used to determine whether to save the fetched results to a file on local machine or not. The function prints the fetched data to the console screen and then proceeds with either saving the data or not. """
 
     # Validating the user specified IP address
     if len(ip) == 0:
@@ -66,7 +67,7 @@ def fetchIp(ip = '', save = True):
         # If the user specfied IP address is not empty, then we continue the task
 
         # Sending the HTTP GET request
-        response = request.urlopen(f'http://ipinfo.io/{ipAddress}')
+        response = request.urlopen(f'http://ipinfo.io/{ip}')
 
         # Checking the response HTTP code
         if response.status == 200:
@@ -79,6 +80,18 @@ def fetchIp(ip = '', save = True):
             # Printing the fetched information on the console screen in a more organised form
             for item in response:
                 print(f'[{green}#{defcol}] %-25s    :    {yellow}%-25s{defcol}' %(item.upper(), response[item]))
+
+            # Checking if the save flag is specified or not
+            if save == False:
+                # If the user did not specified (left default as false), then we skip the process
+
+                pass
+            else:
+                # If the user specifed save flag is not by default, then we continue to execute the task
+
+                # Saving the fetched information to the user specifeid file on the local machine
+                response["timestamp"] = datetime.now().timestamp()
+                open(save, 'w+').write(dumps(response))
         else:
             # If the response from the API server states any form of error, then we raise the error
 
@@ -106,7 +119,7 @@ def main():
         ipAddress = input('Enter the IP address : ')
 
     # Fetching the information for the user specified IP address
-    fetchIp(ip = ipAddress, save = False)
+    fetchIp(ip = ipAddress, save = 'data.json')
 
 if __name__ == '__main__':
     try:
