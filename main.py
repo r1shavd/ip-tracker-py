@@ -14,8 +14,7 @@ Last modified by : Rishav Das (https://github.com/rdofficial/)
 Last modified on : May 22, 2021
 
 Changes made in last modification:
-1. Adding the new way of argument parsing and even more advance.
-2. Adding the feature for the user to mention the save using the arguments.
+1. Adding the feature of storing session history and overall history (on a file named 'data.json' in the current working directory).
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
@@ -54,6 +53,13 @@ else:
     yellow_rev = ''
     defcol = ''
 
+# Declaring some variables that hold the properties of the tool
+# ----
+# 1. This section includes the declaration of the variables like session_history, etc.
+# ----
+session_history = []
+# ----
+
 def fetchIp(ip = '', save = False):
     """ This function fetches the details of the user provided IP address, also the IP address provided should be of a public server, computer / network system, otherwise the tracking results will be resulting in failure (HTTP:404). The function fetches the information of the user specified IP address from an external API (http://ipinfo.io/). The function takes 1 argument : ip, save. The ip argument is to specify the IP address. The argument 'save' is a flag used to determine whether to save the fetched results to a file on local machine or not. The function prints the fetched data to the console screen and then proceeds with either saving the data or not. """
 
@@ -91,6 +97,12 @@ def fetchIp(ip = '', save = False):
                 # Saving the fetched information to the user specifeid file on the local machine
                 response["timestamp"] = datetime.now().timestamp()
                 open(save, 'w+').write(dumps(response))
+
+            # Saving into session history
+            session_history.append({
+                "ip" : ip,
+                "timestamp" : datetime.now().timestamp(),
+                })
         else:
             # If the response from the API server states any form of error, then we raise the error
 
@@ -101,7 +113,7 @@ def main():
     print(f'[{green}!{defcol}]-----------------{yellow}Note{defcol}-----------------[{green}!{defcol}]\n[{red}1{defcol}] Make sure you are connected to internet.\n[{red}2{defcol}] Make sure the IP address you are looking is a public IP.\n[{red}3{defcol}] If you want to stop the script in the middle, then press CTRL+C key combo.\n')
 
     # Getting the user entered values from the arguments
-    arguments = ArgumentParser.parse(argv, ['-i', '--save'])
+    arguments = ArgumentParser.parse(argv, ['-i', '--save'], [])
 
     # Executing the task as per user specified arguments
     if '-i' in arguments:
@@ -127,6 +139,24 @@ def main():
         # If the user did not entered the IP address via the arguments, then we raise an error with a custom message
 
         raise ValueError('Please properly specify IP address. Check out the "--doc help" argument for more information.')
+
+    # After completing every process, we will save the current session history to the overall history
+    try:
+        data = loads(open('data.json', 'r').read())
+    except FileNotFoundError:
+        # If the file is not found on the current working directory, then we continue using a blank list as default
+
+        data = {"history" : []}
+    finally:
+        try:
+            # Saving each items from the current session history
+            for item in session_history:
+                data["history"].append(item)
+            open('data.json', 'w+').write(dumps(data))
+        except:
+            # If there are any errors encountered in the process, then we pass it
+
+            pass
 
 if __name__ == '__main__':
     try:
