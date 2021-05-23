@@ -14,7 +14,7 @@ Last modified by : Rishav Das (https://github.com/rdofficial/)
 Last modified on : May 22, 2021
 
 Changes made in last modification:
-1. Adding the feature of storing session history and overall history (on a file named 'data.json' in the current working directory).
+1. Updating the history saving file root location to the same directory in which the main script file exists.
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
@@ -22,6 +22,7 @@ Authors contributed to this script (Add your name below if you have contributed)
 
 # Importing the requird functions and modules
 try:
+    from os.path import dirname
     from sys import argv, platform
     from json import loads, dumps
     from urllib import request
@@ -142,7 +143,7 @@ def main():
 
     # After completing every process, we will save the current session history to the overall history
     try:
-        data = loads(open('data.json', 'r').read())
+        data = loads(open(f'{dirname(__file__)}/data.json', 'r').read())
     except FileNotFoundError:
         # If the file is not found on the current working directory, then we continue using a blank list as default
 
@@ -152,7 +153,7 @@ def main():
             # Saving each items from the current session history
             for item in session_history:
                 data["history"].append(item)
-            open('data.json', 'w+').write(dumps(data))
+            open(f'{dirname(__file__)}/data.json', 'w+').write(dumps(data))
         except:
             # If there are any errors encountered in the process, then we pass it
 
