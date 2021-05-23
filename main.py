@@ -14,7 +14,7 @@ Last modified by : Rishav Das (https://github.com/rdofficial/)
 Last modified on : May 22, 2021
 
 Changes made in last modification:
-1. Updating the history saving file root location to the same directory in which the main script file exists.
+1. Adding the feature for the users to enter the --no-history argument in order to avoid saving the history to a local file.
 
 Authors contributed to this script (Add your name below if you have contributed) :
 1. Rishav Das (github:https://github.com/rdofficial/, email:rdofficial192@gmail.com)
@@ -114,7 +114,7 @@ def main():
     print(f'[{green}!{defcol}]-----------------{yellow}Note{defcol}-----------------[{green}!{defcol}]\n[{red}1{defcol}] Make sure you are connected to internet.\n[{red}2{defcol}] Make sure the IP address you are looking is a public IP.\n[{red}3{defcol}] If you want to stop the script in the middle, then press CTRL+C key combo.\n')
 
     # Getting the user entered values from the arguments
-    arguments = ArgumentParser.parse(argv, ['-i', '--save'], [])
+    arguments = ArgumentParser.parse(arguments = argv, parameters = ['-i', '--save'], flags = ['--no-history'])
 
     # Executing the task as per user specified arguments
     if '-i' in arguments:
@@ -142,22 +142,25 @@ def main():
         raise ValueError('Please properly specify IP address. Check out the "--doc help" argument for more information.')
 
     # After completing every process, we will save the current session history to the overall history
-    try:
-        data = loads(open(f'{dirname(__file__)}/data.json', 'r').read())
-    except FileNotFoundError:
-        # If the file is not found on the current working directory, then we continue using a blank list as default
+    if arguments["--no-history"] == False:
+        # If the --no-history is not mentioned in the arguments, then only we continue to save the history
 
-        data = {"history" : []}
-    finally:
         try:
-            # Saving each items from the current session history
-            for item in session_history:
-                data["history"].append(item)
-            open(f'{dirname(__file__)}/data.json', 'w+').write(dumps(data))
-        except:
-            # If there are any errors encountered in the process, then we pass it
+            data = loads(open(f'{dirname(__file__)}/data.json', 'r').read())
+        except FileNotFoundError:
+            # If the file is not found on the current working directory, then we continue using a blank list as default
 
-            pass
+            data = {"history" : []}
+        finally:
+            try:
+                # Saving each items from the current session history
+                for item in session_history:
+                    data["history"].append(item)
+                open(f'{dirname(__file__)}/data.json', 'w+').write(dumps(data))
+            except:
+                # If there are any errors encountered in the process, then we pass it
+
+                pass
 
 if __name__ == '__main__':
     try:
