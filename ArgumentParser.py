@@ -20,7 +20,7 @@ Changes made in last modification:
 from sys import argv
 
 def parse(arguments = argv, parameters = [], flags = []):
-	""" This function parses and filters the arguments using the user specified flags. The function takes 3 arguments : arguments, parameters, flags.
+        """ This function parses and filters the arguments using the user specified flags. The function takes 3 arguments : arguments, parameters, flags.
 
 	1. arguments -> The arguments is the actual arguments that are entered by the user during the calling of the script. We can just directly pass the sys.argv list into this function.
 	2. parameters -> The parameters argument takes in those specific defined arguments (in a list) that include user entered values. e.g, --username test100. Then, the values arranged are {"--username" : "test100"}. By default, the parameter assigns an empty list to itself, but it is required to be specified. All those in-built arguments should be specified in this in the form of a list. Shown in the example syntax below.
@@ -32,70 +32,79 @@ def parse(arguments = argv, parameters = [], flags = []):
 	# ----
 	# tokens = {"--argument" : "value"}
 	# ----
-	tokens = {}
+        tokens = {}
+        # The list which will store the flags that are marked true (required for checking out the false flags)
+        tokens_flags_matched = []
 
-	for index, argument in enumerate(arguments):
+        for index, argument in enumerate(arguments):
 		# Iterating through each of the arguments
 
 		# The argument recognized conditions
-		argumentMatched = False
-		flagMatched = False
+                argumentMatched = False
+                flagMatched = False
 
 		# Matching the currently iterated argument with the parameters
-		for parameter in parameters:
-			# Iterating through each parameter as per mentioned in the function's parameter
+                for parameter in parameters:
+                        # Iterating through each parameter as per mentioned in the function's parameter
 
-			if argument == parameter:
+                        if argument == parameter:
 				# If the parameter matches the argument, then we mark the argument as matched
 
-				argumentMatched = True
-			else:
+                                argumentMatched = True
+                        else:
 				# If the parameter does not matches argument, then we skip the current iteration
 
-				continue
+                                continue
 
 		# Matching the currently iterated argument with the flags
-		for flag in flags:
+                for flag in flags:
 			# Iterating through each flag as per mentioned in the function's parameter
 
-			if argument == flag:
+                        if argument == flag:
 				# If the flag matches the argument, then we mark the argument as matched
 
-				flagMatched = True
-			else:
+                                flagMatched = True
+                        else:
 				# If the flag does not matches argument, then we skip the current iteration
 
-				continue
+                                continue
 
-		if argumentMatched:
+                if argumentMatched:
 			# If the arguments matches, then we continue
 
-			try:
+                        try:
 				# Checking on the next argument for being the value
-				if (arguments[index+1] in flags) or (arguments[index+1] in parameters):
+                                if (arguments[index+1] in flags) or (arguments[index+1] in parameters):
 					# If the next argument specified is a flag or parameter itself, then we mark the value for the current argument as empty and continue
 
-					tokens[f"{argument}"] = ''
-					continue
-				else:
+                                        tokens[f"{argument}"] = ''
+                                        continue
+                                else:
 					# If the next argument specified is not a flag, then we continue append the values to the token
 
-					tokens[f"{argument}"] = f'{arguments[index+1]}'
-			except IndexError:
+                                        tokens[f"{argument}"] = f'{arguments[index+1]}'
+                        except IndexError:
 				# If the next argument does not exists, then we mark the value as empty string
 
-				tokens[f"{argument}"] = ''
-		elif flagMatched:
+                                tokens[f"{argument}"] = ''
+                elif flagMatched:
 			# If the argument matches with a flag, then we assign true and continue
 
-			tokens[f"{argument}"] = True
-		else:
+                        tokens[f"{argument}"] = True
+                        tokens_flags_matched.append(f"{argument}")
+                else:
 			# If the argument does not matches either with flag or with a parameter, then we skip the current argument
 
-			continue
+                        continue
+
+        # Marking all the flags that weren't provided as false
+        for flag in flags:
+                if flag not in tokens_flags_matched:
+                        tokens[flag] = False
+        del tokens_flags_matched
 
 	# Returning all the parsed arguments back
-	return tokens
+        return tokens
 
 if __name__ == '__main__':
 	# If the script is executed directly, then we do the below stuff
